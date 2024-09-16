@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <script src="./script.js" defer></script>
+    <header>
+        <img src="./images/logo.png" alt="">
+        <h1>TList</h1>
+    </header>
+    <main>
+        <div id="project-display">
+            <h2 id="project-title">Projects</h2>
+            <h3 id="current-project"></h3>
+            <button id="new-project">New Project</button>
+
+         
+            <h3 id="title-projectlist">Project List</h3>
+            <div id="project-list"></div>
+        </div>
+
+
+        <div id="todo-create">
+            <h2>Current To-Do List</h2>
+            <button id ="add-todo">+</button>
+            <div class="todo-list">
+                
+            </div>
+        </div>
+        
+    </main>
+    <div class="modal-wrapper display-none">
+        <div class="modal">
+            <h2>New Project</h2>
+            <div class="content">
+                <label for="projectName">Project Name</label>
+                <input type="text" id="projectName" name="projectName" required>
+            </div>
+            <div class="buttons">
+                <button class="cancel button">Cancel</button>
+                <button class="create button">Create</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-wrapper2 display-none">
+        <div class="modal2">
+            <h2>New ToDo</h2>
+            <div class="content">
+                <div>
+                    <label for="todoName">ToDo Name</label>
+                    <input type="text" id="todoName" name="todoName" required>
+                </div>
+                <div>
+                    <label for="dueDate">Due Date</label>
+                    <input type="date" id="dueDate" name="dueDate" required>
+                </div>
+                <div>
+                    <label for="description">Description</label>
+                    <textarea name="description" id="description" style="display: block;" rows="8"></textarea>
+                </div>
+                <div>
+                    <label for="priority">Priority</label>
+                    <select name="priority" id="priority">
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="cancel button todocancel">Cancel</button>
+                <button class="create button todocreate">Create</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,399 @@
+@import url('https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Potta+One&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family:"Poppins", system-ui, sans-serif;
+    background-color: rgb(24, 0, 51);
+    min-height: 100vh;
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+header{
+    background-color: rgb(0, 0, 0);
+    box-shadow: inset 0 0 20px 10px rgba(51, 7, 100, 0);
+    font-size: 2rem;
+    position: relative;
+    padding: 5px;
+    display: flex;
+}
+img{
+    width: 100px;
+    height: 80px;
+    align-self: end;
+}
+header h1{
+    text-shadow: 0 0 10px rgb(3, 156, 41), 0 0 20px rgb(0, 129, 146), 0 0px 30px rgb(115, 3, 143);
+    position: absolute;
+    left: 110px;
+    bottom: -7px;
+}
+main{
+    flex-grow: 1;
+
+    display: flex;
+    gap: 10px;
+}
+#project-display{
+    min-width: 400px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgba(163, 163, 163, 0.315);
+    box-shadow: inset 0 0 2px 3px #000;
+}
+#todo-create{
+    flex-grow: 1;
+    box-shadow: inset 0 0 2px 3px #000;
+    background-color: rgba(137, 115, 187, 0.3);
+    position: relative;
+}
+#project-title{
+    text-shadow: 0 0 10px #000;
+    font-weight: 700;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 2rem;
+}
+#current-project{
+    text-shadow: 0 0 10px #000, 0 0 2px rgb(255, 255, 255);
+    background-color: rgba(25, 38, 47, 0.5);
+    box-shadow: 0 0 10px 2px #000, 0 0 10px 4px rgb(48, 29, 53);
+    text-align: center;
+    font-size: 1.5rem;
+    width: 90%;
+
+    padding: 1rem;
+    border-top: 2px solid rgb(165, 165, 165);
+    border-bottom: 2px solid rgb(165, 165, 165);
+}
+
+#new-project{
+    width: 60%;
+    height: 3rem;
+    margin: 1rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(72, 118, 179);
+    color: white;
+    box-shadow: inset 0 0 50px 4px rgba(0, 0, 0, 0.6), 0 0 2px 2px rgba(0, 0, 0, 0.5);
+    transition-duration: 0.2s;
+}
+
+button{
+    cursor: pointer;
+}
+
+#title-projectlist{
+    font-size: 1.7rem;
+    width: 90%;
+
+    text-shadow: 0 0 10px #000;
+    padding: 1rem;
+    font-weight: 700;
+    text-align: center;
+    border-top: 2px solid rgb(165, 165, 165);
+    border-bottom: 2px solid rgb(165, 165, 165);
+}
+
+#project-list {
+    margin: 1rem;
+    width: 90%;
+    min-height: 350px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 1rem;
+    overflow: auto;
+    box-shadow: inset 0 0 5px 5px rgba(49, 41, 47, 0.5);
+}
+
+
+.project-options {
+    background-color: rgba(0, 0, 0, 0);
+    padding: 15px 0px;
+    text-align: center;
+    box-shadow: 0 0 1px 10px rgba(0, 0, 0, 0.4), 0 0 50px 5px rgba(129, 0, 146, 0.644);
+    position: relative; 
+    overflow: hidden;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+.delete {
+    display: none;
+    position: absolute;
+    background-color: rgb(78, 33, 33);
+    width: 25%;
+    z-index: 10;
+    border: none;
+    top: 10px;
+    bottom: 10px;
+    border-radius: 10px;
+    right: 5px;
+    box-shadow: inset 0 0 10px 4px rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 1rem;
+}
+.open{
+    display: none;
+    background-color: rgb(52, 98, 52);
+    top: 10px;
+    bottom: 10px;
+    width: 25%;
+    z-index: 10;
+    position: absolute;
+    border-radius: 10px;
+    left: 5px;
+    border: none;
+    box-shadow: inset 0 0 10px 4px rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 1rem;
+}
+.project-options:hover .delete{
+    display: inline-block;
+}
+.project-options:hover .open{
+    display: inline-block;
+}
+
+
+#todo-create>h2{
+    background-color: #1e042ba6;
+    font-size: 2.5rem;
+    padding: 0.9rem 1.5rem;
+    text-align: right;
+    text-shadow: 0 0 10px rgb(3, 82, 156), 0 0 20px rgb(0, 129, 146), 0 0px 30px rgb(115, 3, 143);
+    border-bottom: 1px solid rgb(165, 165, 165);
+}
+#add-todo{
+    border: none;
+    position: absolute;
+    border-radius: 1rem;
+    right: 1.5rem;
+    top: 7rem;
+    width: 6rem;
+    height: 5rem;
+    font-size: 4rem;
+    color: #fff;
+    text-shadow: 0 0 3px #000, 0 0 10px rgb(8, 35, 39);
+    box-shadow: 0 0 10px 2px #000, inset 0 0 50px 2px rgba(0, 0, 0, 0.6);
+    background-color: rgb(141, 6, 204);
+    transition-duration: 0.2s;
+}
+
+
+
+.modal-wrapper, .modal-wrapper2{
+    background-color: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 80;
+    display: flex;
+    justify-content: center;
+}
+
+.modal {
+    background-color: rgb(38, 53, 53);
+    box-shadow: 0 0 10px 2px #000;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: 400px;
+    overflow: hidden;
+    margin-top: 20vh;
+}
+.modal2 {
+    background-color: rgb(38, 53, 53);
+    box-shadow: 0 0 10px 2px #000;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 700px;
+    height: 700px;
+    overflow: hidden;
+    margin-top: 10vh;
+}
+.modal>h2, .modal2>h2{
+    padding: 15px 0;
+    font-size: 1.5rem;
+    background-color: rgb(30, 65, 68);
+    box-shadow: inset 0 0 100px 3px rgba(0, 0, 0, 0.7);
+    border-bottom: 2px solid rgb(165, 165, 165);
+    text-shadow: 0 0 4px #000, 0 0 6px rgb(5, 29, 32);
+    text-align: center;
+}
+.modal>.content{
+    padding-top: 3rem;
+}
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding: 0 1rem;
+    flex-grow: 1;
+}
+label {
+    height: 2rem;
+    margin-bottom: 0.2rem;
+    font-size: 1.5rem;
+    color: rgb(64, 207, 226);
+    text-shadow: 0 0 2px #000;
+}
+input {
+    padding-left: 0.5rem;
+    width: 100%;
+    border: 0;
+    color: #fff;
+    background-color: rgba(11, 72, 80, 0.5);
+    box-shadow: inset 0 0 1px 2px rgba(0, 0, 0, 0.4);
+    font-size: 1.5rem;
+    height: 3rem;
+}
+.buttons {
+    border-top: 2px solid rgb(165, 165, 165);
+    height: 4rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 4px;
+    justify-content: space-between;
+    background-color: rgb(46, 0, 58);
+}
+
+.cancel, .create {
+    border: 0;
+    font-size: 1.5rem;
+    color: #fff;
+    min-width: 50%;
+    box-shadow: inset 0 0 20px 2px #000;
+}
+
+.cancel{
+    background-color: rgba(255, 0, 0, 0.4);
+}
+
+.create{
+    background-color: rgba(0, 255, 0, 0.4);
+}
+
+.content textarea:hover {
+    background-color: rgba(11, 72, 80, 0.7);
+}
+.content textarea {
+    border: 0;
+    padding-left: 0.2rem;
+    background-color: rgba(11, 72, 80, 0.5);
+    box-shadow: inset 0 0 1px 2px rgba(0, 0, 0, 0.4);
+    font-size: 1.5rem;
+    color: #fff;
+    resize: none;
+    width: 100%;
+}
+.content select {
+    border: 0;
+    color: #fff;
+    padding-left: 0.2rem;
+    background-color: rgba(11, 72, 80, 0.5);
+    box-shadow: inset 0 0 1px 2px rgba(0, 0, 0, 0.4);
+    font-size: 1.5rem;
+    display: block;
+    width: 100%;
+}
+.content select option:nth-child(1) {
+    background-color: rgba(80, 11, 11, 0.8);
+}
+.content select option:nth-child(2) {
+    background-color: rgba(11, 80, 15, 0.8);
+}
+.content select option:nth-child(3) {
+    background-color: rgba(11, 80, 77, 0.8);
+}
+
+
+.todo-list {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: auto;
+}
+
+.todo-item {
+    padding: 10px;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 5px 2px rgb(0, 0, 0);
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.priority-high {
+    background-color: rgba(80, 11, 11, 0.6);
+}
+.priority-medium {
+    background-color: rgba(11, 80, 15, 0.6);
+}
+
+.priority-low {
+    background-color: rgba(11, 80, 77, 0.6);
+}
+
+.short-description {
+    text-shadow: 0 0 10px #000;
+    padding: 5px 0 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.short-description .date {
+    font-size: 1.2rem;
+    font-style: italic;
+}
+
+
+.short-description .title {
+    font-size: 2rem;
+}
+
+.descrip{
+    font-size: 1rem;
+}
+
+.display-none{
+    display: none;
+}
+.todoButtons{
+    margin-top: 10px;
+    margin-right: 30px;
+    width: 80px;
+    padding: 10px 5px;
+    border: none;
+    border: 2px solid black;
+    color: white;
+}
+.todoButtons.remove{
+    background-color: rgba(255, 0, 0, 0.5);
+}
+.todoButtons.complete{
+    background-color: rgba(0, 128, 0, 0.5);
+}
+.finished{
+    text-decoration: line-through;
+}
+
