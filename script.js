@@ -288,6 +288,3 @@ function DOM(){
 }
 
 DOM();
-
-
-
