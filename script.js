@@ -17,7 +17,7 @@ class Project {
         return this.name;
     }
 
-    remove(index) {
+    removeProject(index) {
         Project.projects.splice(index, 1);
         Project.saveToLocalStorage();
     }
@@ -33,7 +33,7 @@ class Project {
 
     static loadFromLocalStorage() {
         const storedProjects = JSON.parse(localStorage.getItem('projects'));
-        if(storedProjects){
+        if (storedProjects) {
             Project.projects = storedProjects.map(projectData => {
                 const project = new Project(projectData.name);
                 project.tasks = projectData.tasks.map(taskData => new Task(
@@ -56,13 +56,13 @@ class Task {
         project.addTask(this);
     }
 
-    toComplete() {
+    toggleCompletion() {
         this.complete = !this.complete;
         Project.saveToLocalStorage();
     }
 }
 
-function DOM(){
+function initializeDOM() {
     Project.loadFromLocalStorage();
 
     const projectButton = document.getElementById("new-project");
@@ -70,109 +70,111 @@ function DOM(){
     const createButton = document.querySelector(".create");
     const modal = document.querySelector(".modal-wrapper");
 
-    projectButton.addEventListener("click", projectButtonEvent);
-    cancelButton.addEventListener("click", closeModalEvent);
-    createButton.addEventListener("click", createButtonEvent);
-
-
+    projectButton.addEventListener("click", openProjectModal);
+    cancelButton.addEventListener("click", closeProjectModal);
+    createButton.addEventListener("click", createProject);
 
     const todoCreateButton = document.querySelector(".todocreate");
     const todoCancelButton = document.querySelector(".todocancel");
     const addButton = document.getElementById("add-todo");
     const modal2 = document.querySelector(".modal-wrapper2");
 
-    addButton.addEventListener("click", addButtonEvent);
-    todoCancelButton.addEventListener("click", todoCancelButtonEvent);
-    todoCreateButton.addEventListener('click', todoCreateButtonEvent);
+    addButton.addEventListener("click", openTodoModal);
+    todoCancelButton.addEventListener("click", closeTodoModal);
+    todoCreateButton.addEventListener('click', createTodo);
 
     let currentProjectIndex = localStorage.getItem('currentProjectIndex');
-    let currentProject = Project.projects.length ? (currentProjectIndex !== null ? Project.projects[currentProjectIndex] : Project.projects[0]) : new Project("Default");
+    let currentProject = Project.projects.length
+        ? (currentProjectIndex !== null ? Project.projects[currentProjectIndex] : Project.projects[0])
+        : new Project("Default");
 
-    function updateCurrentDisplay() {
+    function updateProjectListDisplay() {
         const currentDisplay = document.getElementById("current-project");
         currentDisplay.textContent = currentProject.getName();
 
-        const list = document.getElementById("project-list");
-        while(list.firstChild){
-            list.removeChild(list.firstChild);
+        const projectList = document.getElementById("project-list");
+        while (projectList.firstChild) {
+            projectList.removeChild(projectList.firstChild);
         }
 
         for (let i = Project.projects.length - 1; i >= 0; i--) {
-            const newProject = fillProject(Project.projects[i], i);
-            list.appendChild(newProject);
+            const projectElement = createProjectElement(Project.projects[i], i);
+            projectList.appendChild(projectElement);
         }
     }
 
-    function fillProject(project, i) {
-        const newProject = document.createElement('div');
-        newProject.classList.add("project-options");
-        newProject.textContent = project.getName();
+    function createProjectElement(project, index) {
+        const projectDiv = document.createElement('div');
+        projectDiv.classList.add("project-options");
+        projectDiv.textContent = project.getName();
 
         const openButton = document.createElement("button");
         openButton.classList.add("open");
-        openButton.setAttribute("id", i);
+        openButton.setAttribute("id", index);
         openButton.textContent = "Open";
-        openButton.addEventListener("click", openProjectButtonEvent);
-        newProject.appendChild(openButton);
+        openButton.addEventListener("click", openProject);
 
-        if(i!==0){
-            const deleteButton = document.createElement("button")
+        projectDiv.appendChild(openButton);
+
+        if (index !== 0) {
+            const deleteButton = document.createElement("button");
             deleteButton.classList.add("delete");
-            deleteButton.setAttribute("id", i);
+            deleteButton.setAttribute("id", index);
             deleteButton.textContent = "Delete";
-            deleteButton.addEventListener("click", deleteProjectButtonEvent);
-            newProject.appendChild(deleteButton);
+            deleteButton.addEventListener("click", deleteProject);
+
+            projectDiv.appendChild(deleteButton);
         }
-        return newProject;
+
+        return projectDiv;
     }
 
-    function openProjectButtonEvent() {
+    function openProject() {
         let index = this.getAttribute("id");
         currentProject = Project.projects[index];
         localStorage.setItem('currentProjectIndex', index);
-        updateCurrentDisplay();
-        updateToDoDisplay();
+        updateProjectListDisplay();
+        updateTaskListDisplay();
     }
 
-    function deleteProjectButtonEvent() {
+    function deleteProject() {
         let index = this.getAttribute("id");
         currentProject = Project.projects[index - 1];
         localStorage.setItem('currentProjectIndex', index - 1);
-        Project.projects[index].remove(index);
-        updateCurrentDisplay();
-        updateToDoDisplay();
+        Project.projects[index].removeProject(index);
+        updateProjectListDisplay();
+        updateTaskListDisplay();
     }
 
-
-    function projectButtonEvent() {
+    function openProjectModal() {
         modal.classList.remove("display-none");
     }
 
-    function closeModalEvent() {
+    function closeProjectModal() {
         const input = document.getElementById("projectName");
         input.value = null;
         modal.classList.add("display-none");
     }
 
-    function createButtonEvent() {
+    function createProject() {
         const input = document.getElementById("projectName");
-        if(input.value.trim()===""){
+        if (input.value.trim() === "") {
             alert("Please fill in the Project Name field.");
-            input.value=null;
+            input.value = null;
             return;
         }
         currentProject = new Project(input.value);
         localStorage.setItem('currentProjectIndex', Project.projects.length - 1);
-        updateCurrentDisplay();
-        updateToDoDisplay();
-        closeModalEvent();
+        updateProjectListDisplay();
+        updateTaskListDisplay();
+        closeProjectModal();
     }
 
-    function addButtonEvent() {
+    function openTodoModal() {
         modal2.classList.remove("display-none");
     }
 
-    function todoCancelButtonEvent() {
+    function closeTodoModal() {
         document.getElementById("todoName").value = null;
         document.getElementById("dueDate").value = null;
         document.getElementById("description").value = null;
@@ -181,59 +183,60 @@ function DOM(){
         modal2.classList.add("display-none");
     }
 
-    function todoCreateButtonEvent() {
+    function createTodo() {
         const todoName = document.getElementById("todoName");
         const dueDate = document.getElementById("dueDate");
         const description = document.getElementById("description");
         const priority = document.getElementById("priority");
-        if(todoName.value.trim() === "" || dueDate.value.trim() === ""){
+        if (todoName.value.trim() === "" || dueDate.value.trim() === "") {
             alert("Please fill in both the ToDo Name and Due Date fields.");
             return;
         }
-            
+
         new Task(todoName.value, dueDate.value, description.value, priority.value, currentProject);
-        updateToDoDisplay();
-        todoCancelButtonEvent();
+        updateTaskListDisplay();
+        closeTodoModal();
     }
 
-    function updateToDoDisplay() {
-        const todoDisplay = document.querySelector(".todo-list");
-        while (todoDisplay.firstChild) {
-            todoDisplay.removeChild(todoDisplay.firstChild);
+    function updateTaskListDisplay() {
+        const taskDisplay = document.querySelector(".todo-list");
+        while (taskDisplay.firstChild) {
+            taskDisplay.removeChild(taskDisplay.firstChild);
         }
 
-        for(let i=0; i<currentProject.tasks.length; i++){
-            const todo = fillToDo(currentProject.tasks[i], i);
-            todoDisplay.appendChild(todo);
+        for (let i = 0; i < currentProject.tasks.length; i++) {
+            const taskElement = createTaskElement(currentProject.tasks[i], i);
+            taskDisplay.appendChild(taskElement);
         }
     }
 
-    function fillToDo(task, i) {
-        const todo = document.createElement("div");
-        const small = document.createElement("div");
-        small.classList.add("short-description");
-        todo.classList.add("todo-item");
+    function createTaskElement(task, index) {
+        const taskDiv = document.createElement("div");
+        const shortDescription = document.createElement("div");
+        shortDescription.classList.add("short-description");
+        taskDiv.classList.add("todo-item");
+
         switch (task.priority) {
             case "high":
-                todo.classList.add("priority-high");
+                taskDiv.classList.add("priority-high");
                 break;
             case "medium":
-                todo.classList.add("priority-medium");
+                taskDiv.classList.add("priority-medium");
                 break;
             case "low":
-                todo.classList.add("priority-low");
+                taskDiv.classList.add("priority-low");
                 break;
         }
 
         const title = document.createElement("h3");
         title.textContent = task.title;
         title.classList.add("title");
-        small.appendChild(title);
+        shortDescription.appendChild(title);
 
         const date = document.createElement("h5");
         date.textContent = task.dueDate;
         date.classList.add("date");
-        small.appendChild(date);
+        shortDescription.appendChild(date);
 
         const description = document.createElement("p");
         description.textContent = task.description;
@@ -241,50 +244,50 @@ function DOM(){
 
         const buttonsContainer = document.createElement("div");
 
-        const todoRemove = document.createElement("button");
-        todoRemove.classList.add("todoButtons");
-        todoRemove.classList.add("remove");
-        todoRemove.textContent = "Remove";
-        todoRemove.addEventListener("click", removeToDo);
+        const removeButton = document.createElement("button");
+        removeButton.classList.add("todoButtons");
+        removeButton.classList.add("remove");
+        removeButton.textContent = "Remove";
+        removeButton.addEventListener("click", removeTask);
 
-        const todoComplete = document.createElement("button");
-        todoComplete.classList.add("todoButtons");
-        todoComplete.classList.add("complete");
-        todoComplete.textContent = "Complete";
-        todoComplete.addEventListener("click", completeToDo);
+        const completeButton = document.createElement("button");
+        completeButton.classList.add("todoButtons");
+        completeButton.classList.add("complete");
+        completeButton.textContent = "Complete";
+        completeButton.addEventListener("click", toggleTaskCompletion);
 
-        buttonsContainer.appendChild(todoRemove);
-        buttonsContainer.appendChild(todoComplete);
+        buttonsContainer.appendChild(removeButton);
+        buttonsContainer.appendChild(completeButton);
 
-        todoRemove.setAttribute("id", i);
-        todoComplete.setAttribute("id", i);
+        removeButton.setAttribute("id", index);
+        completeButton.setAttribute("id", index);
 
-        if (task.complete === true) {
+        if (task.complete) {
             title.classList.add("finished");
             description.classList.add("finished");
         }
 
-        todo.appendChild(small);
-        todo.appendChild(description);
-        todo.appendChild(buttonsContainer);
+        taskDiv.appendChild(shortDescription);
+        taskDiv.appendChild(description);
+        taskDiv.appendChild(buttonsContainer);
 
-        return todo;
+        return taskDiv;
     }
 
-    function removeToDo() {
+    function removeTask() {
         let index = this.getAttribute("id");
         currentProject.removeTask(index);
-        updateToDoDisplay();
+        updateTaskListDisplay();
     }
 
-    function completeToDo() {
+    function toggleTaskCompletion() {
         let index = this.getAttribute("id");
-        currentProject.tasks[index].toComplete();
-        updateToDoDisplay();
+        currentProject.tasks[index].toggleCompletion();
+        updateTaskListDisplay();
     }
 
-    updateCurrentDisplay();
-    updateToDoDisplay();
+    updateProjectListDisplay();
+    updateTaskListDisplay();
 }
 
-DOM();
+initializeDOM();
